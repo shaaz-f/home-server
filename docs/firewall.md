@@ -24,7 +24,7 @@ Rows are the **source** and columns the **destination**. "Return" means only rep
 
 | Source ↓ / Dest → | Internal | External | Gateway | VPN | Lab | Mgmt | Untrusted |
 |---|---|---|---|---|---|---|---|
-| **Internal** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow (custom) | ✅ Allow (custom) | ✅ Allow |
+| **Internal** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow (custom) | 🔑 Admin Devices only | ✅ Allow |
 | **External** | ↩️ Return | ↩️ Return | ↩️ Return* | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return |
 | **Gateway** | ✅ Allow | ✅ Allow | – | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow |
 | **VPN** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow (custom) | ✅ Allow (custom) | ✅ Allow |
@@ -37,7 +37,7 @@ Rows are the **source** and columns the **destination**. "Return" means only rep
 ```mermaid
 flowchart LR
     I[Internal] -->|allow| L[Lab]
-    I -->|allow| M[Mgmt]
+    I -->|Admin Devices only| M[Mgmt]
     I -->|allow| U[Untrusted]
     V[VPN] -->|allow| I
     V -->|allow| L
@@ -62,7 +62,7 @@ flowchart LR
 | Block all Traffic | Block | Untrusted (Guest, IoT, Public) | Gateway |
 | TEMP Allow Internal to Lab | Allow | Internal | Lab |
 | TEMP Allow VPN to Lab | Allow | VPN | Lab |
-| TEMP Allow Internal to Mgmt | Allow | Internal | Mgmt |
+| Allow Admin Devices to Mgmt | Allow | Internal (Admin Devices: 10.0.20.10, 10.0.20.11) | Mgmt |
 | TEMP Allow VPN to Mgmt | Allow | VPN | Mgmt |
 
 Each Allow policy has a matching return-traffic policy created by UniFi.

@@ -73,7 +73,7 @@ flowchart LR
         WG["WireGuard Server 1"]
     end
 
-    INT -- "allow" --> MGZ
+    INT -- "Admin Devices only" --> MGZ
     INT -- "allow" --> LABZ
     INT -- "allow" --> UNT
     MGZ -. "return traffic only" .-> INT

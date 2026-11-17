@@ -1,0 +1,32 @@
+# Networks & VLANs
+
+[← Back to overview](../README.md)
+
+## VLANs
+
+| Name | VLAN | Subnet | Gateway | Zone | Used for |
+|---|---|---|---|---|---|
+| Default | 1 | 192.168.0.0/24 | 192.168.0.1 | Internal | Gateway management address |
+| Management | 10 | 10.0.10.0/24 | 10.0.10.1 | Internal | Switch, AP, Proxmox host |
+| Home | 20 | 10.0.20.0/24 | 10.0.20.1 | Internal | PC, laptop, phone, TVs |
+| Private | 30 | 10.0.30.0/24 | 10.0.30.1 | Internal | Homelab services (Caddy, Docker) |
+| Public | 40 | 10.0.40.0/24 | 10.0.40.1 | Untrusted | No clients |
+| IoT | 50 | 10.0.50.0/24 | 10.0.50.1 | Untrusted | No clients |
+| Guest | 100 | 10.0.100.0/24 | 10.0.100.1 | Untrusted | Guest WiFi (GuestWiFi) |
+
+Custom VLANs use `10.0.<VLAN ID>.0/24`, with the gateway at `.1`.
+
+## Network-wide settings
+
+| Setting | Value |
+|---|---|
+| Default security posture | Allow All |
+| Gateway mDNS proxy | Custom: all VLANs, all services |
+| IGMP snooping | On (Home) |
+| IPv6 | Not enabled |
+
+## Internal DNS
+
+| Record | Type | Target |
+|---|---|---|
+| `*.example.ca` | A (wildcard) | Caddy reverse proxy (see [Homelab](homelab.md)) |

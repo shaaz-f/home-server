@@ -35,15 +35,15 @@
 
 ## Endpoints
 
-| Device | Network | Connection |
-|---|---|---|
-| Desktop PC | Home | Switch port 3 |
-| MacBook Pro | Home | WiFi (HomeWiFi) |
-| iPhone | Home | WiFi (HomeWiFi) |
-| Apple TV | Home | Switch port 2 |
-| IPTV box | Home | Switch port 6 |
-| Proxmox host | Management | Switch port 5 |
-| Caddy (VM/LXC) | Private | via Proxmox |
-| Docker host (VM/LXC) | Private | via Proxmox |
-| hermesagent (VM/LXC) | Home | via Proxmox |
-| WireGuard clients (×2) | VPN | Remote |
+| Device | Network | Connection | IP |
+|---|---|---|---|
+| Desktop PC | Home | Switch port 3 | 10.0.20.11 (fixed) |
+| MacBook Pro | Home | WiFi (HomeWiFi) | 10.0.20.10 (fixed) |
+| iPhone | Home | WiFi (HomeWiFi) | DHCP |
+| Apple TV | Home | Switch port 2 | DHCP |
+| IPTV box | Home | Switch port 6 | DHCP |
+| Proxmox host | Management | Switch port 5 | DHCP |
+| Caddy (VM/LXC) | Private | via Proxmox | DHCP |
+| Docker host (VM/LXC) | Private | via Proxmox | DHCP |
+| hermesagent (VM/LXC) | Home | via Proxmox | DHCP |
+| WireGuard clients (×2) | VPN | Remote | – |

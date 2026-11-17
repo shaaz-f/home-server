@@ -25,6 +25,12 @@ Custom VLANs use `10.0.<VLAN ID>.0/24`, with the gateway at `.1`.
 | IGMP snooping | On (Home) |
 | IPv6 | Not enabled |
 
+## Network lists
+
+| Name | Type | Values |
+|---|---|---|
+| Admin Devices | IPv4 | 10.0.20.10, 10.0.20.11 |
+
 ## Internal DNS
 
 | Record | Type | Target |

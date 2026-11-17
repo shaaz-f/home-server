@@ -18,6 +18,6 @@
 | Remote Access (unifi.ui.com) | On |
 | Direct Remote Connection | Off |
 | SSH | Off |
-| Automatic Backups | Off |
+| Automatic Backups | On (weekly) |
 | Analytics | Minimum |
 | Firmware | UniFi OS 6.0.17, Network 11.0.99; all devices up to date |

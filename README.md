@@ -17,7 +17,7 @@ A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zon
 | **WiFi** | UniFi U7 Lite (WiFi 7, 2.4 + 5 GHz) |
 | **Hypervisor** | Proxmox VE |
 | **VLANs** | 7 (Default, Management, Home, Private, Public, IoT, Guest) |
-| **Firewall** | UniFi Zone-Based Firewall: Internal / Untrusted / VPN / External |
+| **Firewall** | UniFi Zone-Based Firewall: Internal / Mgmt / Lab / Untrusted / VPN / External |
 | **Remote access** | WireGuard VPN |
 | **Port forwards** | None |
 
@@ -56,8 +56,12 @@ flowchart LR
     end
     subgraph INT["Internal zone"]
         DEF["Default · VLAN 1<br/>192.168.0.0/24"]
-        MGMT["Management · VLAN 10<br/>10.0.10.0/24"]
         HOME["Home · VLAN 20<br/>10.0.20.0/24"]
+    end
+    subgraph MGZ["Mgmt zone"]
+        MGMT["Management · VLAN 10<br/>10.0.10.0/24"]
+    end
+    subgraph LABZ["Lab zone"]
         PRIV["Private · VLAN 30<br/>10.0.30.0/24"]
     end
     subgraph UNT["Untrusted zone"]
@@ -69,17 +73,25 @@ flowchart LR
         WG["WireGuard Server 1"]
     end
 
+    INT -- "allow" --> MGZ
+    INT -- "allow" --> LABZ
     INT -- "allow" --> UNT
+    MGZ -. "return traffic only" .-> INT
+    LABZ -. "return traffic only" .-> INT
     UNT -. "return traffic only" .-> INT
     UNT -- "allow" --> WAN
     INT -- "allow" --> WAN
+    MGZ -- "allow" --> WAN
+    LABZ -- "allow" --> WAN
     WG -- "allow" --> INT
+    WG -- "allow" --> MGZ
+    WG -- "allow" --> LABZ
     WAN -. "UDP 51820 only" .-> WG
 ```
 
 ## Features
 
-- Seven VLANs across two firewall zones (Internal and Untrusted), plus a VPN zone
+- Seven VLANs across four firewall zones (Internal, Mgmt, Lab, Untrusted), plus a VPN zone
 - Switch, AP and Proxmox host on a dedicated Management VLAN (10)
 - Homelab services (Caddy, Docker) on the Private VLAN (30)
 - No inbound port forwards; WireGuard VPN for remote access

@@ -74,7 +74,8 @@ flowchart LR
     end
 
     INT -- "Admin Devices only" --> MGZ
-    INT -- "allow" --> LABZ
+    INT -- "Admin Devices: all · others: TCP 80/443" --> LABZ
+    LABZ -- "Caddy → Proxmox TCP 8006" --> MGZ
     INT -- "allow" --> UNT
     MGZ -. "return traffic only" .-> INT
     LABZ -. "return traffic only" .-> INT

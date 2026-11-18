@@ -24,11 +24,11 @@ Rows are the **source** and columns the **destination**. "Return" means only rep
 
 | Source ↓ / Dest → | Internal | External | Gateway | VPN | Lab | Mgmt | Untrusted |
 |---|---|---|---|---|---|---|---|
-| **Internal** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow (custom) | 🔑 Admin Devices only | ✅ Allow |
+| **Internal** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | 🔑 Admin Devices: all · others: TCP 80/443 | 🔑 Admin Devices only | ✅ Allow |
 | **External** | ↩️ Return | ↩️ Return | ↩️ Return* | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return |
 | **Gateway** | ✅ Allow | ✅ Allow | – | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow |
 | **VPN** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow (custom) | ✅ Allow (custom) | ✅ Allow |
-| **Lab** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | – | ⛔ Block | ⛔ Block |
+| **Lab** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | – | ⛔ Block (except Caddy → Proxmox TCP 8006) | ⛔ Block |
 | **Mgmt** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | ⛔ Block | – | ⛔ Block |
 | **Untrusted** | ↩️ Return | ✅ Allow | ⛔ Block (custom) | ↩️ Return | ⛔ Block | ⛔ Block | ⛔ Block |
 
@@ -36,7 +36,8 @@ Rows are the **source** and columns the **destination**. "Return" means only rep
 
 ```mermaid
 flowchart LR
-    I[Internal] -->|allow| L[Lab]
+    I[Internal] -->|Admin Devices: all<br/>others: TCP 80/443| L[Lab]
+    L -->|Caddy → Proxmox TCP 8006| M
     I -->|Admin Devices only| M[Mgmt]
     I -->|allow| U[Untrusted]
     V[VPN] -->|allow| I
@@ -60,7 +61,9 @@ flowchart LR
 | Allow All Traffic | Allow | Internal | Untrusted |
 | Allow All Traffic | Allow | VPN | Untrusted |
 | Block all Traffic | Block | Untrusted (Guest, IoT, Public) | Gateway |
-| TEMP Allow Internal to Lab | Allow | Internal | Lab |
+| Allow Admin Devices to Lab | Allow | Internal (Admin Devices) | Lab |
+| Allow Internal to Lab Web | Allow, TCP 80, 443 | Internal | Lab |
+| Allow Caddy to Proxmox UI | Allow, TCP 8006 | Lab (10.0.30.237) | Mgmt (10.0.10.10) |
 | TEMP Allow VPN to Lab | Allow | VPN | Lab |
 | Allow Admin Devices to Mgmt | Allow | Internal (Admin Devices: 10.0.20.10, 10.0.20.11) | Mgmt |
 | TEMP Allow VPN to Mgmt | Allow | VPN | Mgmt |

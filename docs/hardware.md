@@ -42,8 +42,8 @@
 | iPhone | Home | WiFi (HomeWiFi) | DHCP |
 | Apple TV | Home | Switch port 2 | DHCP |
 | IPTV box | Home | Switch port 6 | DHCP |
-| Proxmox host | Management | Switch port 5 | DHCP |
-| Caddy (VM/LXC) | Private | via Proxmox | DHCP |
+| Proxmox host | Management | Switch port 5 | 10.0.10.10 |
+| Caddy (VM/LXC) | Private | via Proxmox | 10.0.30.237 (fixed) |
 | Docker host (VM/LXC) | Private | via Proxmox | DHCP |
 | hermesagent (VM/LXC) | Home | via Proxmox | DHCP |
 | WireGuard clients (×2) | VPN | Remote | – |

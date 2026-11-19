@@ -2,7 +2,7 @@
 
 A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zone-based firewall and a Proxmox homelab.
 
-> **Last updated:** 2026-11-17 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
+> **Last updated:** 2026-11-18 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
 > Change history: [CHANGELOG.md](CHANGELOG.md)
 
 ---
@@ -17,7 +17,7 @@ A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zon
 | **WiFi** | UniFi U7 Lite (WiFi 7, 2.4 + 5 GHz) |
 | **Hypervisor** | Proxmox VE |
 | **VLANs** | 7 (Default, Management, Home, Private, Public, IoT, Guest) |
-| **Firewall** | UniFi Zone-Based Firewall: Internal / Mgmt / Lab / Untrusted / VPN / External |
+| **Firewall** | UniFi Zone-Based Firewall: Internal / Mgmt / Lab / Untrusted / DMZ / VPN / External |
 | **Remote access** | WireGuard VPN |
 | **Port forwards** | None |
 
@@ -34,7 +34,7 @@ flowchart TD
     ATV["Apple TV"]
     OTV["IPTV box"]
     WIFI(("WiFi clients<br/>HomeWiFi / GuestWiFi"))
-    VMS["VMs / containers<br/>Caddy · Docker · hermesagent"]
+    VMS["VMs / containers<br/>Caddy · apps · monitoring · hermesagent (stopped)"]
 
     ISP -- "WAN1 · port 5 · 2.5 GbE" --> GW
     GW -- "port 1 ↔ port 8 (uplink trunk)" --> SW
@@ -65,9 +65,11 @@ flowchart LR
         PRIV["Private · VLAN 30<br/>10.0.30.0/24"]
     end
     subgraph UNT["Untrusted zone"]
-        PUB["Public · VLAN 40<br/>10.0.40.0/24"]
         IOT["IoT · VLAN 50<br/>10.0.50.0/24"]
         GST["Guest · VLAN 100<br/>10.0.100.0/24"]
+    end
+    subgraph DMZZ["DMZ zone"]
+        PUB["Public · VLAN 40<br/>10.0.40.0/24"]
     end
     subgraph VPNZ["VPN zone"]
         WG["WireGuard Server 1"]
@@ -75,12 +77,15 @@ flowchart LR
 
     INT -- "Admin Devices only" --> MGZ
     INT -- "Admin Devices: all · others: TCP 80/443" --> LABZ
-    LABZ -- "Caddy → Proxmox TCP 8006" --> MGZ
+    LABZ -- "Caddy, Monitoring → Proxmox TCP 8006" --> MGZ
     INT -- "allow" --> UNT
+    INT -- "allow" --> DMZZ
     MGZ -. "return traffic only" .-> INT
     LABZ -. "return traffic only" .-> INT
     UNT -. "return traffic only" .-> INT
+    DMZZ -. "return traffic only" .-> INT
     UNT -- "allow" --> WAN
+    DMZZ -- "allow" --> WAN
     INT -- "allow" --> WAN
     MGZ -- "allow" --> WAN
     LABZ -- "allow" --> WAN
@@ -92,9 +97,9 @@ flowchart LR
 
 ## Features
 
-- Seven VLANs across four firewall zones (Internal, Mgmt, Lab, Untrusted), plus a VPN zone
+- Seven VLANs across five firewall zones (Internal, Mgmt, Lab, Untrusted, DMZ), plus a VPN zone
 - Switch, AP and Proxmox host on a dedicated Management VLAN (10)
-- Homelab services (Caddy, Docker) on the Private VLAN (30)
+- Homelab services (Caddy, apps, monitoring) on the Private VLAN (30)
 - No inbound port forwards; WireGuard VPN for remote access
 - Untrusted zone blocked from Internal, the Gateway and other untrusted VLANs
 - Client device isolation on the guest SSID

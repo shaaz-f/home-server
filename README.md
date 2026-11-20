@@ -2,7 +2,7 @@
 
 A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zone-based firewall and a Proxmox homelab.
 
-> **Last updated:** 2026-11-18 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
+> **Last updated:** 2026-11-20 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
 > Change history: [CHANGELOG.md](CHANGELOG.md)
 
 ---
@@ -18,8 +18,8 @@ A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zon
 | **Hypervisor** | Proxmox VE |
 | **VLANs** | 7 (Default, Management, Home, Private, Public, IoT, Guest) |
 | **Firewall** | UniFi Zone-Based Firewall: Internal / Mgmt / Lab / Untrusted / DMZ / VPN / External |
-| **Remote access** | WireGuard VPN |
-| **Port forwards** | None |
+| **Remote access** | WireGuard VPN, NetBird VPN |
+| **Port forwards** | TCP 443, UDP 3478 → `network` VM |
 
 ## Physical topology
 
@@ -34,7 +34,7 @@ flowchart TD
     ATV["Apple TV"]
     OTV["IPTV box"]
     WIFI(("WiFi clients<br/>HomeWiFi / GuestWiFi"))
-    VMS["VMs / containers<br/>Caddy · apps · monitoring · hermesagent (stopped)"]
+    VMS["VMs / containers<br/>Caddy · apps · monitoring · network · hermesagent (stopped)"]
 
     ISP -- "WAN1 · port 5 · 2.5 GbE" --> GW
     GW -- "port 1 ↔ port 8 (uplink trunk)" --> SW
@@ -69,7 +69,7 @@ flowchart LR
         GST["Guest · VLAN 100<br/>10.0.100.0/24"]
     end
     subgraph DMZZ["DMZ zone"]
-        PUB["Public · VLAN 40<br/>10.0.40.0/24"]
+        PUB["Public · VLAN 40<br/>10.0.40.0/24<br/>network VM"]
     end
     subgraph VPNZ["VPN zone"]
         WG["WireGuard Server 1"]
@@ -92,7 +92,9 @@ flowchart LR
     WG -- "allow" --> INT
     WG -- "allow" --> MGZ
     WG -- "allow" --> LABZ
-    WAN -. "UDP 51820 only" .-> WG
+    LABZ -- "Apps → network TCP 443, UDP 3478" --> DMZZ
+    WAN -. "UDP 51820" .-> WG
+    WAN -. "TCP 443, UDP 3478" .-> DMZZ
 ```
 
 ## Features
@@ -100,7 +102,8 @@ flowchart LR
 - Seven VLANs across five firewall zones (Internal, Mgmt, Lab, Untrusted, DMZ), plus a VPN zone
 - Switch, AP and Proxmox host on a dedicated Management VLAN (10)
 - Homelab services (Caddy, apps, monitoring) on the Private VLAN (30)
-- No inbound port forwards; WireGuard VPN for remote access
+- Internet-facing services (Caddy, Pocket ID, NetBird) on the `network` VM in the DMZ (Public VLAN 40)
+- Inbound port forwards: TCP 443 and UDP 3478 to the `network` VM; WireGuard (UDP 51820) and NetBird VPNs for remote access
 - Untrusted zone blocked from Internal, the Gateway and other untrusted VLANs
 - Client device isolation on the guest SSID
 - SSH and Direct Remote Connection disabled

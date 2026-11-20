@@ -28,7 +28,7 @@
 | 2 | – | Apple TV | Home (20) | |
 | 3 | – | Desktop PC | Home (20) | |
 | 4 | – | – | | |
-| 5 | – | Proxmox host | Management (10) | Trunk: VMs tagged Home (20) / Private (30) |
+| 5 | – | Proxmox host | Management (10) | Trunk: VMs tagged Home (20) / Private (30) / Public (40) |
 | 6 | – | IPTV box | Home (20) | IPTV multicast (IGMP) |
 | 7 | – | – | | |
 | 8 | – | Uplink → UCG Ultra port 1 | | Trunk, all VLANs |
@@ -46,5 +46,6 @@
 | Caddy (VM/LXC) | Private | via Proxmox | 10.0.30.237 (fixed) |
 | `apps` (VM) | Private | via Proxmox | 10.0.30.3 (fixed) |
 | `monitoring` (VM) | Private | via Proxmox | 10.0.30.2 (fixed) |
+| `network` (VM) | Public | via Proxmox | 10.0.40.2 (fixed) |
 | hermesagent (LXC, stopped) | Home | via Proxmox | DHCP |
 | WireGuard clients (×2) | VPN | Remote | – |

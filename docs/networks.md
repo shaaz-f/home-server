@@ -10,7 +10,7 @@
 | Management | 10 | 10.0.10.0/24 | 10.0.10.1 | Mgmt | Switch, AP, Proxmox host |
 | Home | 20 | 10.0.20.0/24 | 10.0.20.1 | Internal | PC, laptop, phone, TVs |
 | Private | 30 | 10.0.30.0/24 | 10.0.30.1 | Lab | Homelab services (Caddy, Apps, Monitoring) |
-| Public | 40 | 10.0.40.0/24 | 10.0.40.1 | DMZ | No clients |
+| Public | 40 | 10.0.40.0/24 | 10.0.40.1 | DMZ | `network` VM (Caddy, Pocket ID, NetBird) |
 | IoT | 50 | 10.0.50.0/24 | 10.0.50.1 | Untrusted | No clients |
 | Guest | 100 | 10.0.100.0/24 | 10.0.100.1 | Untrusted | Guest WiFi (GuestWiFi) |
 
@@ -31,8 +31,24 @@ Custom VLANs use `10.0.<VLAN ID>.0/24`, with the gateway at `.1`.
 |---|---|---|
 | Admin Devices | IPv4 | 10.0.20.10, 10.0.20.11 |
 
+## DHCP DNS servers
+
+| Network | DNS servers |
+|---|---|
+| Public | 1.1.1.1, 9.9.9.9 (manual) |
+
 ## Internal DNS
 
 | Record | Type | Target |
 |---|---|---|
-| `*.example.ca` | A (wildcard) | Caddy reverse proxy (see [Homelab](homelab.md)) |
+| `id.example.ca` | A | 10.0.40.2 (`network` VM, Caddy) |
+| `vpn.example.ca` | A | 10.0.40.2 (`network` VM, Caddy) |
+| `*.example.ca` | A (wildcard), rule disabled | Caddy LXC, 10.0.30.237 (see [Homelab](homelab.md)) |
+
+## Public DNS (Cloudflare)
+
+| Record | Type | Target | Proxy |
+|---|---|---|---|
+| `home.example.ca` | A | WAN IP, updated by UniFi Dynamic DNS (Cloudflare) | DNS only |
+| `id.example.ca` | CNAME | `home.example.ca` | DNS only |
+| `vpn.example.ca` | CNAME | `home.example.ca` | DNS only |

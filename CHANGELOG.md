@@ -2,6 +2,15 @@
 
 Changes to the network, newest first.
 
+## 2026-11-20
+- **Homelab:** `network` VM (10.0.40.2, fixed, Public/DMZ) running Caddy (Cloudflare DNS challenge), Pocket ID and NetBird.
+- **Homelab:** NetBird client on `apps` as routing peer; NetBird network `Home` with resource `apps VM` (10.0.30.3).
+- **Remote access:** NetBird VPN at `vpn.example.ca`, signing in through Pocket ID (`id.example.ca`).
+- **Firewall:** Added "Allow Apps to NetBird TCP" (Lab 10.0.30.3 → DMZ 10.0.40.2, TCP 443) and "Allow Apps to NetBird STUN" (UDP 3478).
+- **Firewall:** Port forwards TCP 443 and UDP 3478 to 10.0.40.2.
+- **Networks:** Public DHCP DNS servers set to 1.1.1.1 and 9.9.9.9; internal DNS records `id.example.ca` and `vpn.example.ca` → 10.0.40.2; wildcard `*.example.ca` rule disabled.
+- **DNS:** Public records `id.example.ca` and `vpn.example.ca` (CNAME to `home.example.ca`, DNS only).
+
 ## 2026-11-18
 - **Homelab:** `monitoring` VM (10.0.30.2, fixed, Private) running Uptime Kuma, Beszel hub and Komodo; Beszel agents on the Proxmox host, `monitoring` and `apps`.
 - **Homelab:** Docker host VM renamed `apps`, fixed IP 10.0.30.3, disk grown to 40 GB.

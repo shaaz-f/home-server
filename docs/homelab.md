@@ -36,10 +36,11 @@ flowchart TD
 | Name | Host | Port | Role |
 |---|---|---|---|
 | Caddy | Caddy LXC | 80, 443 | Reverse proxy with automatic HTTPS for `*.example.ca` (Cloudflare DNS challenge) |
-| Uptime Kuma | `monitoring` | TCP 3001 | Uptime monitoring |
+| Uptime Kuma | `monitoring` | TCP 3001 | Uptime monitoring; alerts to a private Discord channel. Monitors: Pocket ID (HTTPS), NetBird (HTTPS), Caddy on `network` (TCP 443) |
 | Beszel hub | `monitoring` | TCP 8090 | CPU, RAM and disk graphs |
 | Komodo Core, Periphery, MongoDB | `monitoring` | TCP 9120 (Core web UI) | Docker management; web terminals disabled |
 | Beszel agent | Proxmox host, `monitoring`, `apps` | – | Reports host and container metrics to the hub |
+| Beszel agent (no Docker socket) | `network` | TCP 45876 (hub connects in) | Reports host metrics to the hub |
 | Caddy (custom build with the Cloudflare DNS module) | `network` | TCP 80, 443 (443/udp not forwarded) | Reverse proxy with automatic HTTPS (DNS challenge) |
 | Pocket ID v2 | `network` | 1411 (Docker network only) | Identity provider (passkeys) |
 | NetBird server and dashboard | `network` | 80 (Docker network only), UDP 3478 | Self-hosted VPN control plane, relay and STUN |

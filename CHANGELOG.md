@@ -3,6 +3,10 @@
 Changes to the network, newest first.
 
 ## 2026-11-20
+- **Homelab:** Beszel agent on `network` (hub connects to TCP 45876; no Docker socket mounted).
+- **Homelab:** Uptime Kuma monitors for Pocket ID, NetBird and Caddy on `network`; alerts sent to a private Discord channel.
+- **Firewall:** Added "Allow Monitoring to Network Agent" (Lab 10.0.30.2 → DMZ 10.0.40.2, TCP 45876) and "Allow Monitoring to Network HTTPS" (TCP 443).
+- **Remote access:** NetBird policies set to one-way (`admins` → `res-apps`; `admins` → `routers`, TCP 8888); default allow-all policy deleted.
 - **Firewall:** "Allow Caddy to Proxmox UI" disabled; return traffic confirmed on for "Allow Monitoring to Proxmox".
 - **Homelab:** `network` VM (10.0.40.2, fixed, Public/DMZ) running Caddy (Cloudflare DNS challenge), Pocket ID and NetBird.
 - **Homelab:** NetBird client on `apps` as routing peer; NetBird network `Home` with resource `apps VM` (10.0.30.3).

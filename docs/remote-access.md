@@ -20,7 +20,7 @@
 | Inbound ports | TCP 443, UDP 3478 (port forwards to `network`) |
 | Routing peer | `apps` VM (Docker client, group `routers`, masquerade on) |
 | Network `Home` | Resource `apps VM` (10.0.30.3) |
-| Access policy | Pocket ID group `NetBird` → `res-apps` |
+| Access policies (one-way) | `admins` → `res-apps`; `admins` → `routers`, TCP 8888 (test); default allow-all policy removed |
 
 ## UniFi console management
 

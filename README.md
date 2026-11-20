@@ -92,7 +92,7 @@ flowchart LR
     WG -- "allow" --> INT
     WG -- "allow" --> MGZ
     WG -- "allow" --> LABZ
-    LABZ -- "Apps → network TCP 443, UDP 3478" --> DMZZ
+    LABZ -- "Apps → network TCP 443, UDP 3478<br/>Monitoring → network TCP 443, 45876" --> DMZZ
     WAN -. "UDP 51820" .-> WG
     WAN -. "TCP 443, UDP 3478" .-> DMZZ
 ```

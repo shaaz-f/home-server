@@ -28,7 +28,7 @@ Rows are the **source** and columns the **destination**. "Return" means only rep
 | **External** | ↩️ Return | ↩️ Return | ↩️ Return* | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return; port forwards TCP 443, UDP 3478 to 10.0.40.2 |
 | **Gateway** | ✅ Allow | ✅ Allow | – | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow |
 | **VPN** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow (custom) | ✅ Allow (custom) | ✅ Allow | ✅ Allow |
-| **Lab** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | – | ⛔ Block (except Monitoring → Proxmox TCP 8006) | ⛔ Block | ⛔ Block (except Apps → `network` TCP 443, UDP 3478) |
+| **Lab** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | – | ⛔ Block (except Monitoring → Proxmox TCP 8006) | ⛔ Block | ⛔ Block (except Apps → `network` TCP 443, UDP 3478; Monitoring → `network` TCP 443, 45876) |
 | **Mgmt** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | ⛔ Block | – | ⛔ Block | ⛔ Block |
 | **Untrusted** | ↩️ Return | ✅ Allow | ⛔ Block (custom) | ↩️ Return | ⛔ Block | ⛔ Block | ⛔ Block | ⛔ Block |
 | **DMZ** | ↩️ Return | ✅ Allow | ↩️ Return | ↩️ Return | ⛔ Block | ⛔ Block | ⛔ Block | – |
@@ -51,7 +51,7 @@ flowchart LR
     D -.->|return only| I
     U -->|block| G[Gateway]
     D -->|block| L
-    L -->|Apps → network TCP 443, UDP 3478| D
+    L -->|Apps → network TCP 443, UDP 3478<br/>Monitoring → network TCP 443, 45876| D
     E -->|port forward TCP 443, UDP 3478| D
     L -->|allow| E[Internet]
     M -->|allow| E
@@ -73,6 +73,8 @@ flowchart LR
 | Allow Monitoring to Proxmox | Allow, TCP 8006 | Lab (10.0.30.2) | Mgmt (10.0.10.10) |
 | Allow Apps to NetBird TCP | Allow, TCP 443 | Lab (10.0.30.3) | DMZ (10.0.40.2) |
 | Allow Apps to NetBird STUN | Allow, UDP 3478 | Lab (10.0.30.3) | DMZ (10.0.40.2) |
+| Allow Monitoring to Network Agent | Allow, TCP 45876 | Lab (10.0.30.2) | DMZ (10.0.40.2) |
+| Allow Monitoring to Network HTTPS | Allow, TCP 443 | Lab (10.0.30.2) | DMZ (10.0.40.2) |
 | TEMP Allow VPN to Lab | Allow | VPN | Lab |
 | Allow Admin Devices to Mgmt | Allow | Internal (Admin Devices: 10.0.20.10, 10.0.20.11) | Mgmt |
 | TEMP Allow VPN to Mgmt | Allow | VPN | Mgmt |

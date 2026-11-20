@@ -77,7 +77,7 @@ flowchart LR
 
     INT -- "Admin Devices only" --> MGZ
     INT -- "Admin Devices: all · others: TCP 80/443" --> LABZ
-    LABZ -- "Caddy, Monitoring → Proxmox TCP 8006" --> MGZ
+    LABZ -- "Monitoring → Proxmox TCP 8006" --> MGZ
     INT -- "allow" --> UNT
     INT -- "allow" --> DMZZ
     MGZ -. "return traffic only" .-> INT

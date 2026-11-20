@@ -3,6 +3,7 @@
 Changes to the network, newest first.
 
 ## 2026-11-20
+- **Firewall:** "Allow Caddy to Proxmox UI" disabled; return traffic confirmed on for "Allow Monitoring to Proxmox".
 - **Homelab:** `network` VM (10.0.40.2, fixed, Public/DMZ) running Caddy (Cloudflare DNS challenge), Pocket ID and NetBird.
 - **Homelab:** NetBird client on `apps` as routing peer; NetBird network `Home` with resource `apps VM` (10.0.30.3).
 - **Remote access:** NetBird VPN at `vpn.example.ca`, signing in through Pocket ID (`id.example.ca`).

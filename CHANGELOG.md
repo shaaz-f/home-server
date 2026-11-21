@@ -3,6 +3,10 @@
 Changes to the network, newest first.
 
 ## 2026-11-21
+- **Homelab:** `management` LXC (10.0.30.4, fixed, Private) running Caddy (custom build with the Cloudflare DNS module, no Docker) with a wildcard certificate; routes `pm.example.ca`, `kuma.example.ca` and `beszel.example.ca` for Admin Devices and the WireGuard subnet.
+- **Homelab:** Previous Caddy / Pi-hole LXC (10.0.30.237) removed.
+- **Firewall:** "Allow Caddy to Proxmox UI" enabled with source 10.0.30.4.
+- **Networks:** Internal wildcard record `*.example.ca` enabled, pointing at 10.0.30.4.
 - **Homelab:** TinyAuth v5.2.0 on `network` (Pocket ID sign-in only); Caddy site `auth.example.ca` and a reusable `tinyauth` forward-auth snippet.
 - **Networks:** Internal DNS record `auth.example.ca` → 10.0.40.2.
 

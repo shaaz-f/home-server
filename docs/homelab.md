@@ -14,7 +14,7 @@
 flowchart TD
     SW["USW Lite 8 PoE · port 5 (trunk)"] --> BR["Proxmox bridge (VLAN-aware)"]
     BR -- "untagged · VLAN 10" --> HOST["Proxmox host UI"]
-    BR -- "tag 30" --> CADDY["Caddy (reverse proxy)"]
+    BR -- "tag 30" --> CADDY["management (Caddy, no Docker)"]
     BR -- "tag 30" --> APPS["apps (Docker)"]
     BR -- "tag 30" --> MON["monitoring (Docker)"]
     BR -- "tag 40" --> NET["network (Caddy, Pocket ID, NetBird, TinyAuth)"]
@@ -25,7 +25,7 @@ flowchart TD
 
 | Name | Type | Network | IP | Resources |
 |---|---|---|---|---|
-| Caddy / Pi-hole | LXC | Private (30) | 10.0.30.237 (fixed) | 512 MB RAM |
+| `management` | LXC (Debian 13, unprivileged, no Docker) | Private (30) | 10.0.30.4 (fixed) | 1 vCPU, 1 GB RAM, 8 GB disk |
 | `apps` | VM (Debian 13, Docker) | Private (30) | 10.0.30.3 (fixed) | 4 GB RAM, 40 GB disk |
 | `monitoring` | VM (Debian 13, Docker) | Private (30) | 10.0.30.2 (fixed) | 2 vCPU, 2 GB RAM, 30 GB disk |
 | `network` | VM (Debian 13, Docker) | Public (40, DMZ) | 10.0.40.2 (fixed) | – |
@@ -35,7 +35,7 @@ flowchart TD
 
 | Name | Host | Port | Role |
 |---|---|---|---|
-| Caddy | Caddy LXC | 80, 443 | Reverse proxy with automatic HTTPS for `*.example.ca` (Cloudflare DNS challenge) |
+| Caddy (custom build with the Cloudflare DNS module, systemd service) | `management` | TCP 80, 443 | Reverse proxy for admin tools; wildcard certificate for `*.example.ca` (Cloudflare DNS challenge) |
 | Uptime Kuma | `monitoring` | TCP 3001 | Uptime monitoring; alerts to a private Discord channel. Monitors: Pocket ID (HTTPS), NetBird (HTTPS), Caddy on `network` (TCP 443) |
 | Beszel hub | `monitoring` | TCP 8090 | CPU, RAM and disk graphs |
 | Komodo Core, Periphery, MongoDB | `monitoring` | TCP 9120 (Core web UI) | Docker management; web terminals disabled |
@@ -47,7 +47,7 @@ flowchart TD
 | NetBird client (routing peer) | `apps` | – | Routes NetBird traffic to 10.0.30.3 |
 | TinyAuth v5.2.0 | `network` | 3000 (Docker network only) | Forward-auth gate for Caddy; signs in through Pocket ID (OAuth only, email whitelist) |
 
-The monitoring web UIs are reached directly by IP and port from Admin Devices.
+The monitoring web UIs are reached by name through Caddy on `management`, or directly by IP and port from Admin Devices.
 
 ## Internal DNS
 
@@ -65,9 +65,11 @@ Caddy on `network` (10.0.40.2), reached through the port forwards:
 
 A reusable Caddy snippet `tinyauth` (forward auth to `tinyauth:3000`, endpoint `/api/auth/caddy`) can be imported by any site block to require a Pocket ID login.
 
-Caddy LXC (10.0.30.237):
+Caddy on `management` (10.0.30.4), wildcard certificate for `*.example.ca`:
 
 | Hostname | Backend | Access |
 |---|---|---|
-| `pm.example.ca` | Proxmox UI, `https://10.0.10.10:8006` | Admin Devices only (Caddy `remote_ip` match; others get 403) |
-| `pi.example.ca` | `http://10.0.30.237:8080` | Any device allowed to reach Lab on TCP 443 |
+| `pm.example.ca` | Proxmox UI, `https://10.0.10.10:8006` | Admin Devices and the WireGuard subnet (192.168.2.0/24); others get 403 |
+| `kuma.example.ca` | Uptime Kuma, `http://10.0.30.2:3001` | Admin Devices and the WireGuard subnet; others get 403 |
+| `beszel.example.ca` | Beszel hub, `http://10.0.30.2:8090` | Admin Devices and the WireGuard subnet; others get 403 |
+| any other name | – | 404 |

@@ -34,7 +34,7 @@ flowchart TD
     ATV["Apple TV"]
     OTV["IPTV box"]
     WIFI(("WiFi clients<br/>HomeWiFi / GuestWiFi"))
-    VMS["VMs / containers<br/>Caddy · apps · monitoring · network · hermesagent (stopped)"]
+    VMS["VMs / containers<br/>management · apps · monitoring · network · hermesagent (stopped)"]
 
     ISP -- "WAN1 · port 5 · 2.5 GbE" --> GW
     GW -- "port 1 ↔ port 8 (uplink trunk)" --> SW
@@ -77,7 +77,7 @@ flowchart LR
 
     INT -- "Admin Devices only" --> MGZ
     INT -- "Admin Devices: all · others: TCP 80/443" --> LABZ
-    LABZ -- "Monitoring → Proxmox TCP 8006" --> MGZ
+    LABZ -- "Monitoring, management → Proxmox TCP 8006" --> MGZ
     INT -- "allow" --> UNT
     INT -- "allow" --> DMZZ
     MGZ -. "return traffic only" .-> INT
@@ -101,7 +101,7 @@ flowchart LR
 
 - Seven VLANs across five firewall zones (Internal, Mgmt, Lab, Untrusted, DMZ), plus a VPN zone
 - Switch, AP and Proxmox host on a dedicated Management VLAN (10)
-- Homelab services (Caddy, apps, monitoring) on the Private VLAN (30)
+- Homelab services (management, apps, monitoring) on the Private VLAN (30)
 - Internet-facing services (Caddy, Pocket ID, NetBird, TinyAuth) on the `network` VM in the DMZ (Public VLAN 40)
 - Inbound port forwards: TCP 443 and UDP 3478 to the `network` VM; WireGuard (UDP 51820) and NetBird VPNs for remote access
 - Untrusted zone blocked from Internal, the Gateway and other untrusted VLANs

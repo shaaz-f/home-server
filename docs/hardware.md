@@ -43,7 +43,7 @@
 | Apple TV | Home | Switch port 2 | DHCP |
 | IPTV box | Home | Switch port 6 | DHCP |
 | Proxmox host | Management | Switch port 5 | 10.0.10.10 |
-| Caddy (VM/LXC) | Private | via Proxmox | 10.0.30.237 (fixed) |
+| `management` (LXC) | Private | via Proxmox | 10.0.30.4 (fixed) |
 | `apps` (VM) | Private | via Proxmox | 10.0.30.3 (fixed) |
 | `monitoring` (VM) | Private | via Proxmox | 10.0.30.2 (fixed) |
 | `network` (VM) | Public | via Proxmox | 10.0.40.2 (fixed) |

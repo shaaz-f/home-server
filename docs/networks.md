@@ -9,7 +9,7 @@
 | Default | 1 | 192.168.0.0/24 | 192.168.0.1 | Internal | Gateway management address |
 | Management | 10 | 10.0.10.0/24 | 10.0.10.1 | Mgmt | Switch, AP, Proxmox host |
 | Home | 20 | 10.0.20.0/24 | 10.0.20.1 | Internal | PC, laptop, phone, TVs |
-| Private | 30 | 10.0.30.0/24 | 10.0.30.1 | Lab | Homelab services (Caddy, Apps, Monitoring) |
+| Private | 30 | 10.0.30.0/24 | 10.0.30.1 | Lab | Homelab services (management, Apps, Monitoring) |
 | Public | 40 | 10.0.40.0/24 | 10.0.40.1 | DMZ | `network` VM (Caddy, Pocket ID, NetBird, TinyAuth) |
 | IoT | 50 | 10.0.50.0/24 | 10.0.50.1 | Untrusted | No clients |
 | Guest | 100 | 10.0.100.0/24 | 10.0.100.1 | Untrusted | Guest WiFi (GuestWiFi) |
@@ -44,7 +44,7 @@ Custom VLANs use `10.0.<VLAN ID>.0/24`, with the gateway at `.1`.
 | `id.example.ca` | A | 10.0.40.2 (`network` VM, Caddy) |
 | `vpn.example.ca` | A | 10.0.40.2 (`network` VM, Caddy) |
 | `auth.example.ca` | A | 10.0.40.2 (`network` VM, Caddy) |
-| `*.example.ca` | A (wildcard), rule disabled | Caddy LXC, 10.0.30.237 (see [Homelab](homelab.md)) |
+| `*.example.ca` | A (wildcard) | 10.0.30.4 (`management` LXC, Caddy; see [Homelab](homelab.md)) |
 
 ## Public DNS (Cloudflare)
 

@@ -28,7 +28,7 @@ Rows are the **source** and columns the **destination**. "Return" means only rep
 | **External** | ↩️ Return | ↩️ Return | ↩️ Return* | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return; port forwards TCP 443, UDP 3478 to 10.0.40.2 |
 | **Gateway** | ✅ Allow | ✅ Allow | – | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow |
 | **VPN** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow (custom) | ✅ Allow (custom) | ✅ Allow | ✅ Allow |
-| **Lab** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | – | ⛔ Block (except Monitoring → Proxmox TCP 8006) | ⛔ Block | ⛔ Block (except Apps → `network` TCP 443, UDP 3478; Monitoring → `network` TCP 443, 45876) |
+| **Lab** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | – | ⛔ Block (except Monitoring and `management` → Proxmox TCP 8006) | ⛔ Block | ⛔ Block (except Apps → `network` TCP 443, UDP 3478; Monitoring → `network` TCP 443, 45876) |
 | **Mgmt** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | ⛔ Block | – | ⛔ Block | ⛔ Block |
 | **Untrusted** | ↩️ Return | ✅ Allow | ⛔ Block (custom) | ↩️ Return | ⛔ Block | ⛔ Block | ⛔ Block | ⛔ Block |
 | **DMZ** | ↩️ Return | ✅ Allow | ↩️ Return | ↩️ Return | ⛔ Block | ⛔ Block | ⛔ Block | – |
@@ -38,7 +38,7 @@ Rows are the **source** and columns the **destination**. "Return" means only rep
 ```mermaid
 flowchart LR
     I[Internal] -->|Admin Devices: all<br/>others: TCP 80/443| L[Lab]
-    L -->|Monitoring → Proxmox TCP 8006| M
+    L -->|Monitoring, management → Proxmox TCP 8006| M
     I -->|Admin Devices only| M[Mgmt]
     I -->|allow| U[Untrusted]
     I -->|allow| D[DMZ]
@@ -69,7 +69,7 @@ flowchart LR
 | Block all Traffic | Block | Untrusted (Guest, IoT) | Gateway |
 | Allow Admin Devices to Lab | Allow | Internal (Admin Devices) | Lab |
 | Allow Internal to Lab Web | Allow, TCP 80, 443 | Internal | Lab |
-| Allow Caddy to Proxmox UI (disabled) | Allow, TCP 8006 | Lab (10.0.30.237) | Mgmt (10.0.10.10) |
+| Allow Caddy to Proxmox UI | Allow, TCP 8006 | Lab (10.0.30.4) | Mgmt (10.0.10.10) |
 | Allow Monitoring to Proxmox | Allow, TCP 8006 | Lab (10.0.30.2) | Mgmt (10.0.10.10) |
 | Allow Apps to NetBird TCP | Allow, TCP 443 | Lab (10.0.30.3) | DMZ (10.0.40.2) |
 | Allow Apps to NetBird STUN | Allow, UDP 3478 | Lab (10.0.30.3) | DMZ (10.0.40.2) |

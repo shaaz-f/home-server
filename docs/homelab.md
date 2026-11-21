@@ -17,7 +17,7 @@ flowchart TD
     BR -- "tag 30" --> CADDY["Caddy (reverse proxy)"]
     BR -- "tag 30" --> APPS["apps (Docker)"]
     BR -- "tag 30" --> MON["monitoring (Docker)"]
-    BR -- "tag 40" --> NET["network (Caddy, Pocket ID, NetBird)"]
+    BR -- "tag 40" --> NET["network (Caddy, Pocket ID, NetBird, TinyAuth)"]
     BR -- "tag 20" --> HERMES["hermesagent (stopped)"]
 ```
 
@@ -45,6 +45,7 @@ flowchart TD
 | Pocket ID v2 | `network` | 1411 (Docker network only) | Identity provider (passkeys) |
 | NetBird server and dashboard | `network` | 80 (Docker network only), UDP 3478 | Self-hosted VPN control plane, relay and STUN |
 | NetBird client (routing peer) | `apps` | – | Routes NetBird traffic to 10.0.30.3 |
+| TinyAuth v5.2.0 | `network` | 3000 (Docker network only) | Forward-auth gate for Caddy; signs in through Pocket ID (OAuth only, email whitelist) |
 
 The monitoring web UIs are reached directly by IP and port from Admin Devices.
 
@@ -60,6 +61,9 @@ Caddy on `network` (10.0.40.2), reached through the port forwards:
 |---|---|---|
 | `id.example.ca` | `pocket-id:1411` | Public |
 | `vpn.example.ca` | NetBird server and dashboard (`netbird-server:80`, `netbird-dashboard:80`) | Public |
+| `auth.example.ca` | `tinyauth:3000` | Public (login page) |
+
+A reusable Caddy snippet `tinyauth` (forward auth to `tinyauth:3000`, endpoint `/api/auth/caddy`) can be imported by any site block to require a Pocket ID login.
 
 Caddy LXC (10.0.30.237):
 

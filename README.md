@@ -2,7 +2,7 @@
 
 A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zone-based firewall and a Proxmox homelab.
 
-> **Last updated:** 2026-11-20 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
+> **Last updated:** 2026-11-21 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
 > Change history: [CHANGELOG.md](CHANGELOG.md)
 
 ---
@@ -102,7 +102,7 @@ flowchart LR
 - Seven VLANs across five firewall zones (Internal, Mgmt, Lab, Untrusted, DMZ), plus a VPN zone
 - Switch, AP and Proxmox host on a dedicated Management VLAN (10)
 - Homelab services (Caddy, apps, monitoring) on the Private VLAN (30)
-- Internet-facing services (Caddy, Pocket ID, NetBird) on the `network` VM in the DMZ (Public VLAN 40)
+- Internet-facing services (Caddy, Pocket ID, NetBird, TinyAuth) on the `network` VM in the DMZ (Public VLAN 40)
 - Inbound port forwards: TCP 443 and UDP 3478 to the `network` VM; WireGuard (UDP 51820) and NetBird VPNs for remote access
 - Untrusted zone blocked from Internal, the Gateway and other untrusted VLANs
 - Client device isolation on the guest SSID

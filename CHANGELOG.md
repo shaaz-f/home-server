@@ -2,6 +2,10 @@
 
 Changes to the network, newest first.
 
+## 2026-11-21
+- **Homelab:** TinyAuth v5.2.0 on `network` (Pocket ID sign-in only); Caddy site `auth.example.ca` and a reusable `tinyauth` forward-auth snippet.
+- **Networks:** Internal DNS record `auth.example.ca` → 10.0.40.2.
+
 ## 2026-11-20
 - **Homelab:** Beszel agent on `network` (hub connects to TCP 45876; no Docker socket mounted).
 - **Homelab:** Uptime Kuma monitors for Pocket ID, NetBird and Caddy on `network`; alerts sent to a private Discord channel.

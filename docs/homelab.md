@@ -38,7 +38,8 @@ flowchart TD
 | Caddy (custom build with the Cloudflare DNS module, systemd service) | `management` | TCP 80, 443 | Reverse proxy for admin tools; wildcard certificate for `*.example.ca` (Cloudflare DNS challenge) |
 | Uptime Kuma | `monitoring` | TCP 3001 | Uptime monitoring; alerts to a private Discord channel. Monitors: Pocket ID (HTTPS), NetBird (HTTPS), Caddy on `network` (TCP 443) |
 | Beszel hub | `monitoring` | TCP 8090 | CPU, RAM and disk graphs |
-| Komodo Core, Periphery, MongoDB | `monitoring` | TCP 9120 (Core web UI) | Docker management; web terminals disabled |
+| Komodo Core, Periphery, MongoDB | `monitoring` | TCP 9120 (Core web UI) | Docker management; sign-in through Pocket ID (OIDC), local login kept; web terminals disabled |
+| Komodo Periphery | `apps` | – (connects out to Core through `komodo.example.ca`) | Docker agent; terminals and container exec disabled; working directory `/opt/komodo` |
 | Beszel agent | Proxmox host, `monitoring`, `apps` | – | Reports host and container metrics to the hub |
 | Beszel agent (no Docker socket) | `network` | TCP 45876 (hub connects in) | Reports host metrics to the hub |
 | Caddy (custom build with the Cloudflare DNS module) | `network` | TCP 80, 443 (443/udp not forwarded) | Reverse proxy with automatic HTTPS (DNS challenge) |
@@ -70,6 +71,7 @@ Caddy on `management` (10.0.30.4), wildcard certificate for `*.example.ca`:
 | Hostname | Backend | Access |
 |---|---|---|
 | `pm.example.ca` | Proxmox UI, `https://10.0.10.10:8006` | Admin Devices and the WireGuard subnet (192.168.2.0/24); others get 403 |
-| `kuma.example.ca` | Uptime Kuma, `http://10.0.30.2:3001` | Admin Devices and the WireGuard subnet; others get 403 |
-| `beszel.example.ca` | Beszel hub, `http://10.0.30.2:8090` | Admin Devices and the WireGuard subnet; others get 403 |
+| `kuma.example.ca` | Uptime Kuma, `http://10.0.30.2:3001` | Admin Devices, the WireGuard subnet and 10.0.30.3 (`apps`); others get 403 |
+| `beszel.example.ca` | Beszel hub, `http://10.0.30.2:8090` | Admin Devices, the WireGuard subnet and 10.0.30.3 (`apps`); others get 403 |
+| `komodo.example.ca` | Komodo Core, `http://10.0.30.2:9120` | Admin Devices, the WireGuard subnet and 10.0.30.3 (`apps`); others get 403 |
 | any other name | – | 404 |

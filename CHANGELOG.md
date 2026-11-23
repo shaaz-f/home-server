@@ -2,6 +2,11 @@
 
 Changes to the network, newest first.
 
+## 2026-11-22
+- **Homelab:** Komodo sign-in through Pocket ID (OIDC client `Komodo`, restricted to the `admins` group); local login kept.
+- **Homelab:** Komodo Periphery agent on `apps`, connecting out to Core through `komodo.example.ca`.
+- **Homelab:** `management` Caddy route `komodo.example.ca` → Komodo Core; `kuma.`, `beszel.` and `komodo.` also accept 10.0.30.3 (`apps`).
+
 ## 2026-11-21
 - **Homelab:** `management` LXC (10.0.30.4, fixed, Private) running Caddy (custom build with the Cloudflare DNS module, no Docker) with a wildcard certificate; routes `pm.example.ca`, `kuma.example.ca` and `beszel.example.ca` for Admin Devices and the WireGuard subnet.
 - **Homelab:** Previous Caddy / Pi-hole LXC (10.0.30.237) removed.

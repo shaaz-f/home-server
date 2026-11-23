@@ -2,7 +2,7 @@
 
 A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zone-based firewall and a Proxmox homelab.
 
-> **Last updated:** 2026-11-21 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
+> **Last updated:** 2026-11-22 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
 > Change history: [CHANGELOG.md](CHANGELOG.md)
 
 ---

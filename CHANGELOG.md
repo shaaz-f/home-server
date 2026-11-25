@@ -2,6 +2,13 @@
 
 Changes to the network, newest first.
 
+## 2026-11-24
+- **Cloud VPS:** Reinstalled with Ubuntu 24.04 (ARM64, 50 GB boot volume); SSH key only, root login off, fail2ban; rpcbind disabled; new reserved public IP; Docker installed.
+- **Cloud VPS:** Provider firewall inbound: TCP 22, 80, 443 and UDP 3478.
+- **Cloud VPS:** NetBird server and dashboard at `nb.example.ca` with the built-in Traefik; sign-in through Pocket ID only; user approval on; peer session expiry 30 days; default policy removed.
+- **Cloud VPS:** Pocket ID v2.19.3 at `oidc.example.ca`, behind Traefik.
+- **Networks:** Public and internal A records `nb.example.ca` and `oidc.example.ca` → cloud VPS.
+
 ## 2026-11-22
 - **Homelab:** Komodo sign-in through Pocket ID (OIDC client `Komodo`, restricted to the `admins` group); local login kept.
 - **Homelab:** Komodo Periphery agent on `apps`, connecting out to Core through `komodo.example.ca`.

@@ -44,6 +44,8 @@ Custom VLANs use `10.0.<VLAN ID>.0/24`, with the gateway at `.1`.
 | `id.example.ca` | A | 10.0.40.2 (`network` VM, Caddy) |
 | `vpn.example.ca` | A | 10.0.40.2 (`network` VM, Caddy) |
 | `auth.example.ca` | A | 10.0.40.2 (`network` VM, Caddy) |
+| `nb.example.ca` | A | Cloud VPS public IP |
+| `oidc.example.ca` | A | Cloud VPS public IP |
 | `*.example.ca` | A (wildcard) | 10.0.30.4 (`management` LXC, Caddy; see [Homelab](homelab.md)) |
 
 ## Public DNS (Cloudflare)
@@ -53,3 +55,5 @@ Custom VLANs use `10.0.<VLAN ID>.0/24`, with the gateway at `.1`.
 | `home.example.ca` | A | WAN IP, updated by UniFi Dynamic DNS (Cloudflare) | DNS only |
 | `id.example.ca` | CNAME | `home.example.ca` | DNS only |
 | `vpn.example.ca` | CNAME | `home.example.ca` | DNS only |
+| `nb.example.ca` | A | Cloud VPS public IP | DNS only |
+| `oidc.example.ca` | A | Cloud VPS public IP | DNS only |

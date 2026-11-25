@@ -11,7 +11,7 @@
 | Clients | 2 |
 | Access once connected | Internal, Untrusted, Internet |
 
-## NetBird VPN
+## NetBird VPN (home server)
 
 | | |
 |---|---|
@@ -21,6 +21,10 @@
 | Routing peer | `apps` VM (Docker client, group `routers`, masquerade on) |
 | Network `Home` | Resource `apps VM` (10.0.30.3) |
 | Access policies (one-way) | `admins` → `res-apps`; `admins` → `routers`, TCP 8888 (test); default allow-all policy removed |
+
+## NetBird VPN (cloud VPS)
+
+Self-hosted on the cloud VPS at `nb.example.ca`, sign-in through Pocket ID at `oidc.example.ca`. See [Cloud VPS](cloud.md).
 
 ## UniFi console management
 

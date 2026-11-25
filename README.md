@@ -2,7 +2,7 @@
 
 A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zone-based firewall and a Proxmox homelab.
 
-> **Last updated:** 2026-11-22 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
+> **Last updated:** 2026-11-24 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
 > Change history: [CHANGELOG.md](CHANGELOG.md)
 
 ---
@@ -18,7 +18,8 @@ A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zon
 | **Hypervisor** | Proxmox VE |
 | **VLANs** | 7 (Default, Management, Home, Private, Public, IoT, Guest) |
 | **Firewall** | UniFi Zone-Based Firewall: Internal / Mgmt / Lab / Untrusted / DMZ / VPN / External |
-| **Remote access** | WireGuard VPN, NetBird VPN |
+| **Remote access** | WireGuard VPN, NetBird VPN (home server and cloud VPS) |
+| **Cloud VPS** | Ubuntu 24.04 (ARM64): NetBird, Pocket ID, Traefik |
 | **Port forwards** | TCP 443, UDP 3478 → `network` VM |
 
 ## Physical topology
@@ -35,6 +36,7 @@ flowchart TD
     OTV["IPTV box"]
     WIFI(("WiFi clients<br/>HomeWiFi / GuestWiFi"))
     VMS["VMs / containers<br/>management · apps · monitoring · network · hermesagent (stopped)"]
+    CLOUD["Cloud VPS<br/>NetBird · Pocket ID"]
 
     ISP -- "WAN1 · port 5 · 2.5 GbE" --> GW
     GW -- "port 1 ↔ port 8 (uplink trunk)" --> SW
@@ -45,6 +47,7 @@ flowchart TD
     SW -- "port 6" --> OTV
     AP -.-> WIFI
     PVE --- VMS
+    ISP -. "internet" .- CLOUD
 ```
 
 ## Logical layout (VLANs & firewall zones)
@@ -107,6 +110,7 @@ flowchart LR
 - Untrusted zone blocked from Internal, the Gateway and other untrusted VLANs
 - Client device isolation on the guest SSID
 - SSH and Direct Remote Connection disabled
+- Cloud VPS running a second NetBird server and Pocket ID (sign-in through Pocket ID only)
 
 ## Documentation
 
@@ -117,6 +121,7 @@ flowchart LR
 | [Firewall & Zones](docs/firewall.md) | Zones, zone matrix, custom policies |
 | [WiFi](docs/wifi.md) | SSIDs, security, radio settings |
 | [Homelab](docs/homelab.md) | Proxmox host, VMs/containers, internal DNS |
+| [Cloud VPS](docs/cloud.md) | Cloud server, firewall, NetBird and Pocket ID |
 | [Remote Access & Management](docs/remote-access.md) | WireGuard and console management settings |
 | [Changelog](CHANGELOG.md) | Dated changes to the network |
 

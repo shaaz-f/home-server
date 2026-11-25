@@ -45,7 +45,7 @@ flowchart TD
 | Caddy (custom build with the Cloudflare DNS module) | `network` | TCP 80, 443 (443/udp not forwarded) | Reverse proxy with automatic HTTPS (DNS challenge) |
 | Pocket ID v2 | `network` | 1411 (Docker network only) | Identity provider (passkeys) |
 | NetBird server and dashboard | `network` | 80 (Docker network only), UDP 3478 | Self-hosted VPN control plane, relay and STUN |
-| NetBird client (routing peer) | `apps` | – | Routes NetBird traffic to 10.0.30.3 |
+| NetBird client `netbird-nb` (routing peer) | `apps` | – | Routes cloud NetBird traffic to 10.0.30.4; previous client for the home NetBird server stopped |
 | TinyAuth v5.2.0 | `network` | 3000 (Docker network only) | Forward-auth gate for Caddy; signs in through Pocket ID (OAuth only, email whitelist) |
 
 The monitoring web UIs are reached by name through Caddy on `management`, or directly by IP and port from Admin Devices.

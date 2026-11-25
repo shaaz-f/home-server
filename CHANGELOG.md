@@ -3,6 +3,9 @@
 Changes to the network, newest first.
 
 ## 2026-11-24
+- **Cloud NetBird:** Network `Home` with routing peer `apps` (masquerade) and resource `caddy-admin` (10.0.30.4/32, group `res-admin`); policy `admins` → `res-admin` TCP 443.
+- **Cloud NetBird:** DNS zone for `example.ca` (distributed to `admins`): `*` → 10.0.30.4, `nb` and `oidc` → cloud VPS.
+- **Homelab:** NetBird client on `apps` for the home NetBird server stopped; new client `netbird-nb` connected to the cloud NetBird.
 - **Cloud VPS:** Reinstalled with Ubuntu 24.04 (ARM64, 50 GB boot volume); SSH key only, root login off, fail2ban; rpcbind disabled; new reserved public IP; Docker installed.
 - **Cloud VPS:** Provider firewall inbound: TCP 22, 80, 443 and UDP 3478.
 - **Cloud VPS:** NetBird server and dashboard at `nb.example.ca` with the built-in Traefik; sign-in through Pocket ID only; user approval on; peer session expiry 30 days; default policy removed.

@@ -43,5 +43,21 @@ All in `/opt/stacks/<name>/`.
 | Group sync | JWT group sync on, claim `groups` |
 | New users | Approval required |
 | Peer session expiry | 30 days |
-| Policies | Default allow-all policy removed; no policies |
-| Peers | MacBook |
+| Policies | Default allow-all policy removed; `admins` → `res-admin`, TCP 443 |
+| Peers | MacBook, `apps` (routing peer) |
+
+### Networks
+
+| Network | Routing peer | Resource | Group |
+|---|---|---|---|
+| `Home` | `apps` (group `routers`, masquerade on) | `caddy-admin`, 10.0.30.4/32 | `res-admin` |
+
+### DNS zone
+
+Zone `example.ca`, distributed to `admins`:
+
+| Record | Type | Value |
+|---|---|---|
+| `*` | A | 10.0.30.4 (`management` Caddy) |
+| `nb` | A | Cloud VPS public IP |
+| `oidc` | A | Cloud VPS public IP |

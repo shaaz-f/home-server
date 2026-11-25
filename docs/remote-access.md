@@ -18,7 +18,7 @@
 | Server | Self-hosted on the `network` VM at `vpn.example.ca` (management, signal, relay, STUN, dashboard) |
 | Sign-in | Pocket ID (`id.example.ca`), passkey; local email login disabled; new users need approval |
 | Inbound ports | TCP 443, UDP 3478 (port forwards to `network`) |
-| Routing peer | `apps` VM (Docker client, group `routers`, masquerade on) |
+| Routing peer | None (its client on `apps` is stopped) |
 | Network `Home` | Resource `apps VM` (10.0.30.3) |
 | Access policies (one-way) | `admins` → `res-apps`; `admins` → `routers`, TCP 8888 (test); default allow-all policy removed |
 

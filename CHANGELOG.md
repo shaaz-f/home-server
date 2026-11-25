@@ -3,6 +3,7 @@
 Changes to the network, newest first.
 
 ## 2026-11-25
+- **Cloud VPS:** Pocket ID group `family`; `oauth2-proxy` client allows `admins` and `family`.
 - **Homelab:** oauth2-proxy v7.15.6 on `management` (127.0.0.1:4180), signing in through Pocket ID (client `oauth2-proxy`); sign-in page `login.example.ca`.
 - **Homelab:** `management` Caddyfile restructured to one site block per hostname with a shared wildcard certificate; `kuma.` and `beszel.` now require the Pocket ID group `admins` instead of an address list; `pm.` and `komodo.` unchanged.
 - **Homelab:** Beszel hub accepts the `X-Auth-Request-Email` header from 10.0.30.4 for sign-in.

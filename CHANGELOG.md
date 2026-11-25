@@ -3,6 +3,11 @@
 Changes to the network, newest first.
 
 ## 2026-11-25
+- **Homelab:** `network` VM (10.0.40.2) shut down; home NetBird server, its Pocket ID, Caddy and TinyAuth retired with it. Stopped NetBird client on `apps` removed.
+- **Firewall:** Port forwards TCP 443 and UDP 3478 removed; Lab → DMZ policies for `network` removed.
+- **Networks:** Internal records `id.`, `vpn.`, `auth.` removed; public `id.` and `vpn.` CNAMEs and `home.` removed; Dynamic DNS moved to a new hostname.
+- **Remote access:** WireGuard clients replaced (MacBook, iPhone) with the new Dynamic DNS hostname as endpoint.
+- **Homelab:** Uptime Kuma monitors now cover `nb.`, `oidc.` and Caddy on `management`; Beszel system for `network` removed.
 - **Homelab:** Komodo Periphery on `apps` connects to Core directly (`http://10.0.30.2:9120`) instead of through Caddy.
 - **Homelab:** Komodo sign-in moved to the Pocket ID on the cloud VPS (client `Komodo`, `admins` only); `komodo.example.ca` now also requires the Pocket ID group `admins` at Caddy.
 - **Cloud VPS:** Pocket ID group `family`; `oauth2-proxy` client allows `admins` and `family`.

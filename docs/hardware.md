@@ -46,6 +46,6 @@
 | `management` (LXC) | Private | via Proxmox | 10.0.30.4 (fixed) |
 | `apps` (VM) | Private | via Proxmox | 10.0.30.3 (fixed) |
 | `monitoring` (VM) | Private | via Proxmox | 10.0.30.2 (fixed) |
-| `network` (VM) | Public | via Proxmox | 10.0.40.2 (fixed) |
+| `network` (VM, stopped) | Public | via Proxmox | 10.0.40.2 (fixed) |
 | hermesagent (LXC, stopped) | Home | via Proxmox | DHCP |
-| WireGuard clients (×2) | VPN | Remote | – |
+| WireGuard clients (×2: MacBook, iPhone) | VPN | Remote | – |

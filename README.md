@@ -2,7 +2,7 @@
 
 A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zone-based firewall and a Proxmox homelab.
 
-> **Last updated:** 2026-11-24 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
+> **Last updated:** 2026-11-25 · **UniFi Network:** 11.0.99 · **UniFi OS:** 6.0.17
 > Change history: [CHANGELOG.md](CHANGELOG.md)
 
 ---
@@ -18,9 +18,9 @@ A segmented home network on the Ubiquiti UniFi platform, with seven VLANs, a zon
 | **Hypervisor** | Proxmox VE |
 | **VLANs** | 7 (Default, Management, Home, Private, Public, IoT, Guest) |
 | **Firewall** | UniFi Zone-Based Firewall: Internal / Mgmt / Lab / Untrusted / DMZ / VPN / External |
-| **Remote access** | WireGuard VPN, NetBird VPN (home server and cloud VPS) |
+| **Remote access** | WireGuard VPN, NetBird VPN (cloud VPS) |
 | **Cloud VPS** | Ubuntu 24.04 (ARM64): NetBird, Pocket ID, Traefik |
-| **Port forwards** | TCP 443, UDP 3478 → `network` VM |
+| **Port forwards** | None |
 
 ## Physical topology
 
@@ -35,7 +35,7 @@ flowchart TD
     ATV["Apple TV"]
     OTV["IPTV box"]
     WIFI(("WiFi clients<br/>HomeWiFi / GuestWiFi"))
-    VMS["VMs / containers<br/>management · apps · monitoring · network · hermesagent (stopped)"]
+    VMS["VMs / containers<br/>management · apps · monitoring · network (stopped) · hermesagent (stopped)"]
     CLOUD["Cloud VPS<br/>NetBird · Pocket ID"]
 
     ISP -- "WAN1 · port 5 · 2.5 GbE" --> GW
@@ -72,7 +72,7 @@ flowchart LR
         GST["Guest · VLAN 100<br/>10.0.100.0/24"]
     end
     subgraph DMZZ["DMZ zone"]
-        PUB["Public · VLAN 40<br/>10.0.40.0/24<br/>network VM"]
+        PUB["Public · VLAN 40<br/>10.0.40.0/24<br/>network VM (stopped)"]
     end
     subgraph VPNZ["VPN zone"]
         WG["WireGuard Server 1"]
@@ -95,9 +95,7 @@ flowchart LR
     WG -- "allow" --> INT
     WG -- "allow" --> MGZ
     WG -- "allow" --> LABZ
-    LABZ -- "Apps → network TCP 443, UDP 3478<br/>Monitoring → network TCP 443, 45876" --> DMZZ
     WAN -. "UDP 51820" .-> WG
-    WAN -. "TCP 443, UDP 3478" .-> DMZZ
 ```
 
 ## Features
@@ -105,12 +103,11 @@ flowchart LR
 - Seven VLANs across five firewall zones (Internal, Mgmt, Lab, Untrusted, DMZ), plus a VPN zone
 - Switch, AP and Proxmox host on a dedicated Management VLAN (10)
 - Homelab services (management, apps, monitoring) on the Private VLAN (30)
-- Internet-facing services (Caddy, Pocket ID, NetBird, TinyAuth) on the `network` VM in the DMZ (Public VLAN 40)
-- Inbound port forwards: TCP 443 and UDP 3478 to the `network` VM; WireGuard (UDP 51820) and NetBird VPNs for remote access
+- No inbound port forwards; WireGuard (UDP 51820, on the gateway) and NetBird VPNs for remote access
 - Untrusted zone blocked from Internal, the Gateway and other untrusted VLANs
 - Client device isolation on the guest SSID
 - SSH and Direct Remote Connection disabled
-- Cloud VPS running a second NetBird server and Pocket ID (sign-in through Pocket ID only)
+- Cloud VPS running the NetBird server and Pocket ID; every app is reached through one Caddy with Pocket ID group checks
 
 ## Documentation
 

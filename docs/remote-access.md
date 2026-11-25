@@ -8,21 +8,11 @@
 |---|---|
 | Server | WireGuard Server 1 on the UCG Ultra |
 | Listen port | UDP 51820 |
-| Clients | 2 |
+| Clients | 2 (MacBook, iPhone) |
+| Client endpoint | A Dynamic DNS hostname (Cloudflare, updated by UniFi) |
 | Access once connected | Internal, Untrusted, Internet |
 
-## NetBird VPN (home server)
-
-| | |
-|---|---|
-| Server | Self-hosted on the `network` VM at `vpn.example.ca` (management, signal, relay, STUN, dashboard) |
-| Sign-in | Pocket ID (`id.example.ca`), passkey; local email login disabled; new users need approval |
-| Inbound ports | TCP 443, UDP 3478 (port forwards to `network`) |
-| Routing peer | None (its client on `apps` is stopped) |
-| Network `Home` | Resource `apps VM` (10.0.30.3) |
-| Access policies (one-way) | `admins` → `res-apps`; `admins` → `routers`, TCP 8888 (test); default allow-all policy removed |
-
-## NetBird VPN (cloud VPS)
+## NetBird VPN
 
 Self-hosted on the cloud VPS at `nb.example.ca`, sign-in through Pocket ID at `oidc.example.ca`. See [Cloud VPS](cloud.md).
 

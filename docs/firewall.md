@@ -25,10 +25,10 @@ Rows are the **source** and columns the **destination**. "Return" means only rep
 | Source ↓ / Dest → | Internal | External | Gateway | VPN | Lab | Mgmt | Untrusted | DMZ |
 |---|---|---|---|---|---|---|---|---|
 | **Internal** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | 🔑 Admin Devices: all · others: TCP 80/443 | 🔑 Admin Devices only | ✅ Allow | ✅ Allow |
-| **External** | ↩️ Return | ↩️ Return | ↩️ Return* | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return; port forwards TCP 443, UDP 3478 to 10.0.40.2 |
+| **External** | ↩️ Return | ↩️ Return | ↩️ Return* | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return | ↩️ Return |
 | **Gateway** | ✅ Allow | ✅ Allow | – | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow |
 | **VPN** | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow | ✅ Allow (custom) | ✅ Allow (custom) | ✅ Allow | ✅ Allow |
-| **Lab** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | – | ⛔ Block (except Monitoring and `management` → Proxmox TCP 8006) | ⛔ Block | ⛔ Block (except Apps → `network` TCP 443, UDP 3478; Monitoring → `network` TCP 443, 45876) |
+| **Lab** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | – | ⛔ Block (except Monitoring and `management` → Proxmox TCP 8006) | ⛔ Block | ⛔ Block |
 | **Mgmt** | ↩️ Return | ✅ Allow | ✅ Allow | ↩️ Return | ⛔ Block | – | ⛔ Block | ⛔ Block |
 | **Untrusted** | ↩️ Return | ✅ Allow | ⛔ Block (custom) | ↩️ Return | ⛔ Block | ⛔ Block | ⛔ Block | ⛔ Block |
 | **DMZ** | ↩️ Return | ✅ Allow | ↩️ Return | ↩️ Return | ⛔ Block | ⛔ Block | ⛔ Block | – |
@@ -51,8 +51,6 @@ flowchart LR
     D -.->|return only| I
     U -->|block| G[Gateway]
     D -->|block| L
-    L -->|Apps → network TCP 443, UDP 3478<br/>Monitoring → network TCP 443, 45876| D
-    E -->|port forward TCP 443, UDP 3478| D
     L -->|allow| E[Internet]
     M -->|allow| E
     U -->|allow| E
@@ -71,10 +69,6 @@ flowchart LR
 | Allow Internal to Lab Web | Allow, TCP 80, 443 | Internal | Lab |
 | Allow Caddy to Proxmox UI | Allow, TCP 8006 | Lab (10.0.30.4) | Mgmt (10.0.10.10) |
 | Allow Monitoring to Proxmox | Allow, TCP 8006 | Lab (10.0.30.2) | Mgmt (10.0.10.10) |
-| Allow Apps to NetBird TCP | Allow, TCP 443 | Lab (10.0.30.3) | DMZ (10.0.40.2) |
-| Allow Apps to NetBird STUN | Allow, UDP 3478 | Lab (10.0.30.3) | DMZ (10.0.40.2) |
-| Allow Monitoring to Network Agent | Allow, TCP 45876 | Lab (10.0.30.2) | DMZ (10.0.40.2) |
-| Allow Monitoring to Network HTTPS | Allow, TCP 443 | Lab (10.0.30.2) | DMZ (10.0.40.2) |
 | TEMP Allow VPN to Lab | Allow | VPN | Lab |
 | Allow Admin Devices to Mgmt | Allow | Internal (Admin Devices: 10.0.20.10, 10.0.20.11) | Mgmt |
 | TEMP Allow VPN to Mgmt | Allow | VPN | Mgmt |
@@ -83,10 +77,7 @@ Each Allow policy has a matching return-traffic policy created by UniFi.
 
 ## Port forwarding
 
-| Name | Protocol | WAN port | Forwards to |
-|---|---|---|---|
-| Caddy HTTPS | TCP | 443 | 10.0.40.2:443 (`network` VM) |
-| NetBird STUN | UDP | 3478 | 10.0.40.2:3478 (`network` VM) |
+None. WireGuard (UDP 51820) is served by the gateway itself.
 
 ## NAT
 

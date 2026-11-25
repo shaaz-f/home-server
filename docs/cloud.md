@@ -32,7 +32,7 @@ All in `/opt/stacks/<name>/`.
 | Stack | Containers | Hostname | Role |
 |---|---|---|---|
 | `netbird` | Traefik v3.7.18, NetBird server, NetBird dashboard | `nb.example.ca` | VPN control plane, signal, relay and STUN; Traefik serves HTTPS (Let's Encrypt) for every stack |
-| `pocket-id` | Pocket ID v2.19.3 (user 1000, read-only, all capabilities dropped) | `oidc.example.ca` | Identity provider (passkeys); joined to the Traefik network, routed by Docker labels. Groups: `admins`, `family`. OIDC clients: `NetBird` (allowed: `admins`), `oauth2-proxy` (allowed: `admins`, `family`) |
+| `pocket-id` | Pocket ID v2.19.3 (user 1000, read-only, all capabilities dropped) | `oidc.example.ca` | Identity provider (passkeys); joined to the Traefik network, routed by Docker labels. Groups: `admins`, `family`. OIDC clients: `NetBird` (allowed: `admins`), `oauth2-proxy` (allowed: `admins`, `family`), `Komodo` (allowed: `admins`) |
 
 ## NetBird (cloud)
 

@@ -3,6 +3,8 @@
 Changes to the network, newest first.
 
 ## 2026-11-25
+- **Homelab:** Komodo Periphery on `apps` connects to Core directly (`http://10.0.30.2:9120`) instead of through Caddy.
+- **Homelab:** Komodo sign-in moved to the Pocket ID on the cloud VPS (client `Komodo`, `admins` only); `komodo.example.ca` now also requires the Pocket ID group `admins` at Caddy.
 - **Cloud VPS:** Pocket ID group `family`; `oauth2-proxy` client allows `admins` and `family`.
 - **Homelab:** oauth2-proxy v7.15.6 on `management` (127.0.0.1:4180), signing in through Pocket ID (client `oauth2-proxy`); sign-in page `login.example.ca`.
 - **Homelab:** `management` Caddyfile restructured to one site block per hostname with a shared wildcard certificate; `kuma.` and `beszel.` now require the Pocket ID group `admins` instead of an address list; `pm.` and `komodo.` unchanged.

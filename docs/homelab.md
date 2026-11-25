@@ -39,8 +39,8 @@ flowchart TD
 | oauth2-proxy v7.15.6 (systemd service) | `management` | 127.0.0.1:4180 | Pocket ID sign-in for Caddy (forward auth); Pocket ID client `oauth2-proxy` (PKCE) |
 | Uptime Kuma (own login disabled; TCP 3001 accepts only 10.0.30.4, via a `DOCKER-USER` rule in the `kuma-firewall` service) | `monitoring` | TCP 3001 | Uptime monitoring; alerts to a private Discord channel. Monitors: Pocket ID (HTTPS), NetBird (HTTPS), Caddy on `network` (TCP 443) |
 | Beszel hub | `monitoring` | TCP 8090 | CPU, RAM and disk graphs; trusted-header sign-in (`X-Auth-Request-Email`, honoured only from 10.0.30.4) |
-| Komodo Core, Periphery, MongoDB | `monitoring` | TCP 9120 (Core web UI) | Docker management; sign-in through Pocket ID (OIDC), local login kept; web terminals disabled |
-| Komodo Periphery | `apps` | – (connects out to Core through `komodo.example.ca`) | Docker agent; terminals and container exec disabled; working directory `/opt/komodo` |
+| Komodo Core, Periphery, MongoDB | `monitoring` | TCP 9120 (Core web UI) | Docker management; sign-in through Pocket ID on the cloud VPS (OIDC client `Komodo`, `admins` only), local login kept; web terminals disabled |
+| Komodo Periphery | `apps` | – (connects out to Core directly at `http://10.0.30.2:9120`) | Docker agent; terminals and container exec disabled; working directory `/opt/komodo` |
 | Beszel agent | Proxmox host, `monitoring`, `apps` | – | Reports host and container metrics to the hub |
 | Beszel agent (no Docker socket) | `network` | TCP 45876 (hub connects in) | Reports host metrics to the hub |
 | Caddy (custom build with the Cloudflare DNS module) | `network` | TCP 80, 443 (443/udp not forwarded) | Reverse proxy with automatic HTTPS (DNS challenge) |
@@ -75,5 +75,5 @@ Caddy on `management` (10.0.30.4). One site block per hostname; all use the wild
 | `pm.example.ca` | Proxmox UI, `https://10.0.10.10:8006` | Admin Devices and the WireGuard subnet (192.168.2.0/24); others get 403 |
 | `kuma.example.ca` | Uptime Kuma, `http://10.0.30.2:3001` | Pocket ID group `admins` (Kuma's own login is disabled) |
 | `beszel.example.ca` | Beszel hub, `http://10.0.30.2:8090` | Pocket ID group `admins`; Beszel signs the user in from the forwarded email |
-| `komodo.example.ca` | Komodo Core, `http://10.0.30.2:9120` | Admin Devices, the WireGuard subnet and 10.0.30.3 (`apps`); others get 403 |
+| `komodo.example.ca` | Komodo Core, `http://10.0.30.2:9120` | Pocket ID group `admins`, then Komodo's own Pocket ID login |
 | any other name | – | 404 |

@@ -37,7 +37,7 @@ flowchart TD
 |---|---|---|---|
 | Caddy (custom build with the Cloudflare DNS module, systemd service) | `management` | TCP 80, 443 | Reverse proxy for admin tools; wildcard certificate for `*.example.ca` (Cloudflare DNS challenge) |
 | oauth2-proxy v7.15.6 (systemd service) | `management` | 127.0.0.1:4180 | Pocket ID sign-in for Caddy (forward auth); Pocket ID client `oauth2-proxy` (PKCE) |
-| Uptime Kuma | `monitoring` | TCP 3001 | Uptime monitoring; alerts to a private Discord channel. Monitors: Pocket ID (HTTPS), NetBird (HTTPS), Caddy on `network` (TCP 443) |
+| Uptime Kuma (own login disabled; TCP 3001 accepts only 10.0.30.4, via a `DOCKER-USER` rule in the `kuma-firewall` service) | `monitoring` | TCP 3001 | Uptime monitoring; alerts to a private Discord channel. Monitors: Pocket ID (HTTPS), NetBird (HTTPS), Caddy on `network` (TCP 443) |
 | Beszel hub | `monitoring` | TCP 8090 | CPU, RAM and disk graphs; trusted-header sign-in (`X-Auth-Request-Email`, honoured only from 10.0.30.4) |
 | Komodo Core, Periphery, MongoDB | `monitoring` | TCP 9120 (Core web UI) | Docker management; sign-in through Pocket ID (OIDC), local login kept; web terminals disabled |
 | Komodo Periphery | `apps` | – (connects out to Core through `komodo.example.ca`) | Docker agent; terminals and container exec disabled; working directory `/opt/komodo` |
@@ -73,7 +73,7 @@ Caddy on `management` (10.0.30.4). One site block per hostname; all use the wild
 |---|---|---|
 | `login.example.ca` | oauth2-proxy, `127.0.0.1:4180` | Sign-in page (Pocket ID) |
 | `pm.example.ca` | Proxmox UI, `https://10.0.10.10:8006` | Admin Devices and the WireGuard subnet (192.168.2.0/24); others get 403 |
-| `kuma.example.ca` | Uptime Kuma, `http://10.0.30.2:3001` | Pocket ID group `admins` |
+| `kuma.example.ca` | Uptime Kuma, `http://10.0.30.2:3001` | Pocket ID group `admins` (Kuma's own login is disabled) |
 | `beszel.example.ca` | Beszel hub, `http://10.0.30.2:8090` | Pocket ID group `admins`; Beszel signs the user in from the forwarded email |
 | `komodo.example.ca` | Komodo Core, `http://10.0.30.2:9120` | Admin Devices, the WireGuard subnet and 10.0.30.3 (`apps`); others get 403 |
 | any other name | – | 404 |

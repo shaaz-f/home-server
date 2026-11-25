@@ -6,6 +6,7 @@ Changes to the network, newest first.
 - **Homelab:** oauth2-proxy v7.15.6 on `management` (127.0.0.1:4180), signing in through Pocket ID (client `oauth2-proxy`); sign-in page `login.example.ca`.
 - **Homelab:** `management` Caddyfile restructured to one site block per hostname with a shared wildcard certificate; `kuma.` and `beszel.` now require the Pocket ID group `admins` instead of an address list; `pm.` and `komodo.` unchanged.
 - **Homelab:** Beszel hub accepts the `X-Auth-Request-Email` header from 10.0.30.4 for sign-in.
+- **Homelab:** Uptime Kuma: TCP 3001 on `monitoring` only accepts connections from 10.0.30.4 (`DOCKER-USER` rule, `kuma-firewall` service); Kuma's own login disabled.
 
 ## 2026-11-24
 - **Cloud NetBird:** Network `Home` with routing peer `apps` (masquerade) and resource `caddy-admin` (10.0.30.4/32, group `res-admin`); policy `admins` → `res-admin` TCP 443.

@@ -9,13 +9,14 @@
 | Connection | USW Lite 8 PoE, port 5 (trunk) |
 | Host management network | Management (VLAN 10) |
 | VM networks | Home (20), Private (30), Public (40) via VLAN tags on the Proxmox bridge |
+| iGPU | Intel UHD Graphics 630 (`00:02.0`, `8086:3e92`) bound to `vfio-pci` on the host (`i915` blacklisted), passed through to `apps` |
 
 ```mermaid
 flowchart TD
     SW["USW Lite 8 PoE · port 5 (trunk)"] --> BR["Proxmox bridge (VLAN-aware)"]
     BR -- "untagged · VLAN 10" --> HOST["Proxmox host UI"]
     BR -- "tag 30" --> CADDY["management (Caddy, no Docker)"]
-    BR -- "tag 30" --> APPS["apps (Docker)"]
+    BR -- "tag 30" --> APPS["apps (Docker, iGPU)"]
     BR -- "tag 30" --> MON["monitoring (Docker)"]
     BR -- "tag 40" --> NET["network (stopped)"]
     BR -- "tag 20" --> HERMES["hermesagent (stopped)"]
@@ -26,10 +27,21 @@ flowchart TD
 | Name | Type | Network | IP | Resources |
 |---|---|---|---|---|
 | `management` | LXC (Debian 13, unprivileged, no Docker) | Private (30) | 10.0.30.4 (fixed) | 1 vCPU, 1 GB RAM, 8 GB disk |
-| `apps` | VM (Debian 13, Docker) | Private (30) | 10.0.30.3 (fixed) | 4 GB RAM, 40 GB disk |
+| `apps` | VM (Debian 13, Docker; q35, UEFI) | Private (30) | 10.0.30.3 (fixed) | 4 GB RAM, 40 GB disk, Intel UHD 630 iGPU (PCIe passthrough) |
 | `monitoring` | VM (Debian 13, Docker) | Private (30) | 10.0.30.2 (fixed) | 2 vCPU, 2 GB RAM, 30 GB disk |
 | `network` | VM (stopped) | Public (40, DMZ) | 10.0.40.2 (fixed) | – |
 | hermesagent | LXC (stopped) | Home (20) | DHCP | 4 GB RAM |
+
+Start at boot: `management`, `apps`, `monitoring`. `network`: off.
+
+### iGPU on `apps`
+
+| | |
+|---|---|
+| Proxmox setting | `hostpci0: 0000:00:02.0,pcie=1,rombar=0` (not primary GPU) |
+| Guest driver | `i915`; firmware from Debian `non-free-firmware`; VA-API driver `intel-media-va-driver` (iHD) |
+| Devices | `/dev/dri/renderD128` (iGPU, group `render`, GID 991); `card0` is the Proxmox console display |
+| Containers | `devices: [/dev/dri:/dev/dri]` and `group_add: ["991"]` |
 
 ## Services
 

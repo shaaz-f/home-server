@@ -3,6 +3,8 @@
 Changes to the network, newest first.
 
 ## 2026-11-25
+- **Homelab:** Intel UHD 630 iGPU passed through to `apps` (host: `vfio-pci`, `i915` blacklisted); `apps` has Debian `non-free-firmware` enabled and the Intel graphics firmware and VA-API driver installed.
+- **Homelab:** Start at boot turned on for `management`; turned off for `network`.
 - **Homelab:** `network` VM (10.0.40.2) shut down; home NetBird server, its Pocket ID, Caddy and TinyAuth retired with it. Stopped NetBird client on `apps` removed.
 - **Firewall:** Port forwards TCP 443 and UDP 3478 removed; Lab → DMZ policies for `network` removed.
 - **Networks:** Internal records `id.`, `vpn.`, `auth.` removed; public `id.` and `vpn.` CNAMEs and `home.` removed; Dynamic DNS moved to a new hostname.
